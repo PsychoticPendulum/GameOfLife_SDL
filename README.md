@@ -13,4 +13,4 @@ Rules:
    <li>Any live cell with more than three live neighbours dies, as if by overpopulation.</li>
    <li>Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</li>
 </ul>
-<a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">About<a>
+<a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Wikipedia<a>
