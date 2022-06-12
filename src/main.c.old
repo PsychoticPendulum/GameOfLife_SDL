@@ -1,0 +1,16 @@
+// This is only a test main.c to check if everything is working properly
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "Log.h"
+
+int main(int argc, char **argv) {
+	Log(HEADER, "Just a HEADER mate", NULL);
+	Log(INFO, "This is an INFORMATION", NULL);
+	Log(WARNING, "This is a WARNING", "");
+	Log(ERROR, "This is an ERROR", "And here is what you should do");
+	Log(-1, "This is INVALID INPUT", NULL);
+	return EXIT_SUCCESS;	
+}

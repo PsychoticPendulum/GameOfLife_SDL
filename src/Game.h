@@ -16,18 +16,6 @@
 
 #define CENTERED SDL_WINDOWPOS_CENTERED
 
-#define ANSI_RED    	"\x1b[31m"
-#define ANSI_YELLOW  	"\x1b[33m"
-#define ANSI_GREEN   	"\x1b[32m"
-#define ANSI_CYAN    	"\x1b[36m"
-#define ANSI_BLUE    	"\x1b[34m"
-#define ANSI_MAGENTA 	"\x1b[35m"
-#define ANSI_WHITE	 	"\x1b[39m"
-#define ANSI_LIGHT_GREY	"\x1b[38m"
-#define ANSI_DARK_GREY	"\x1b[39m"
-#define ANSI_BLACK		"\x1b[30m"
-#define ANSI_RESET   	"\x1b[0m"
-
 struct Options {
 	int resolution;
 };
@@ -52,6 +40,7 @@ struct Color;
 struct Colors;
 struct Field;
 
+#include "Log.h"
 #include "Color.h"
 #include "Draw.h"
 #include "Update.h"

@@ -1,34 +1,15 @@
 #include "Game.h"
 
-#define INFO	0
-#define WARNING	1
-#define ERROR	2
-
-void dprintf(int type, const char *str) {
-	switch (type) {
-		case WARNING:
-			printf(ANSI_YELLOW "[WARNING]\t\t%s\n" ANSI_RESET, str);
-			break;
-		case ERROR:
-			printf(ANSI_RED "[ERROR]\t\t\t%s\n" ANSI_RESET, str);
-			break;
-		default:
-			printf("[INFO]\t\t\t%s\n", str);
-			break;			
-	}		
-}
-
 void Clean(SDL_Window *window, SDL_Renderer *renderer, struct Game game) {
-	printf("\n  -> Renderer ...\t");
+	Log(INFO, "Cleaning Renderer", NULL);
 	SDL_DestroyRenderer(renderer);
-	printf("Done!\n  -> Window ...\t\t");
+	Log(INFO, "Cleaning Window", NULL);
 	SDL_DestroyWindow(window);
-	printf("Done!\n  -> Fontcache ...\t");
+	Log(INFO, "Cleaning Fontcache", NULL);
 	TTF_CloseFont(game.font);
 	TTF_Quit();
-	printf("Done!\n  -> SDL ...\t\t");
+	Log(INFO, "Cleaning SDL", NULL);
 	SDL_Quit();
-	printf("Done!\n");
 }
 
 bool Init(struct Options opt) {
@@ -37,62 +18,58 @@ bool Init(struct Options opt) {
 	};
 
 	// Initialize SDL
-	printf("Initializing SDL ...\t");
+	Log(INFO, "Initializing SDL ...", NULL);
 	if (SDL_Init(SDL_INIT_VIDEO) || TTF_Init()) {
-		printf("Error initializing SDL: %s\n", SDL_GetError());
+		Log(ERROR, "Failed initializing SDL ...", SDL_GetError());
 		return EXIT_FAILURE;
 	}
 
 	// Initialize SDL_TTF
 	game.font = TTF_OpenFont("/usr/share/fonts/TTF/Roboto-Medium.ttf", 24);
 	if (!game.font) {
-		printf("Error initializing font: %s\n", SDL_GetError());
+		Log(ERROR, "Error initializing font ...", SDL_GetError());
 		SDL_Quit();
 		return EXIT_FAILURE;
 	}
-	printf("Done!\n");
 
 	// Get SDL Version
 	SDL_version compiled;
 	SDL_version linked;
 	SDL_VERSION(&compiled);
 	sprintf(game.msg, "SDL Compiled:\t%d.%d.%d", compiled.major, compiled.minor, compiled.patch);
-	dprintf(INFO, game.msg);
+	Log(INFO, game.msg, NULL);
 	SDL_GetVersion(&linked);
 	sprintf(game.msg, "SDL Linked:\t%d.%d.%d", linked.major, linked.minor, linked.patch);
-	dprintf(INFO, game.msg);
+	Log(INFO, game.msg, NULL);
 	if (linked.patch >= 0xa) {
-		dprintf(WARNING, "Unsupported version of SDL");
-		dprintf(INFO, "Supported SDL Version: 2.0.9 or older");
+		Log(WARNING, "Unsupported version of SDL", NULL);
+		Log(INFO, "Supported SDL Version: 2.0.9 or older", NULL);
 	} 
 
 	// Create Window
-	printf("Creating Window ...\t");
+	Log(INFO, "Creating Window ...", NULL);
 	Uint32 window_flags = 0;
 	SDL_Window *window = SDL_CreateWindow(game.title, CENTERED, CENTERED, game.w, game.h, window_flags);
 	if (!window) {
-		printf("Error creating window: %s\n", SDL_GetError());
+		Log(ERROR, "Error creating window ...", SDL_GetError());
 		SDL_Quit();
 		return EXIT_FAILURE;
 	}
-	printf("Done!\n");
 	
 	// Create renderer
-	printf("Creating Renderer ...\t");
+	Log(INFO, "Creating Renderer ...", NULL);
 	Uint32 render_flags = 0; //SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, render_flags);
 	if (!renderer) {
-		printf("Error creating renderer: %s\n", SDL_GetError());
+		Log(ERROR, "Error creating renderer ...", SDL_GetError());
 		SDL_DestroyWindow(window);
 		SDL_Quit();
 		return EXIT_FAILURE;
 	}
-	printf("Done!\n");
 
 	Loop(window, renderer, game);	
 
 	// Clean up and exit
-	printf("Cleaning up:");
 	Clean(window, renderer, game);
 	return EXIT_SUCCESS;
 }
@@ -108,7 +85,7 @@ int main(int argc, char **argv) {
 				opt.resolution = atoi(optarg);
 				break;
 			default:
-				dprintf(WARNING, "Invalid Option");
+				Log(WARNING, "Invalid Option",NULL);
 				break;
 		}
 	}

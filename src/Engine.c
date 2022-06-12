@@ -51,6 +51,14 @@ void Create_Frame(struct Field *field) {
 	} 
 }
 
+void Happening(struct Field *field) {
+	for (int x = 0; x < field->w; x++) {
+		for (int y = 0; y < field->h; y++) {
+			field->cell[x][y].active = (y % 10 == 0 || x % 10 > 5);
+		}
+	}
+}
+
 void Randomize(struct Field *field) {
 	for (int x = 0; x < field->w; x++) {
 		for (int y = 0; y < field->h; y++) {
@@ -117,6 +125,9 @@ void Handle_Event(struct Game *game, struct Field *field) {
 					// Randomize
 					case SDLK_r:
 						Randomize(field);
+						break;
+					case SDLK_e:
+						Happening(field);
 						break;
 				}
 				break;
